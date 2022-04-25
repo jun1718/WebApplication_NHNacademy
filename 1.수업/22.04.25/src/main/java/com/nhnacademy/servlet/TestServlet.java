@@ -2,7 +2,9 @@ package com.nhnacademy.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Optional;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,12 +45,23 @@ public class TestServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws ServletException, IOException {
+//        CounterUtils.increaseCounter(getServletContetxt());
+        ServletContext context = getServletContext();
+        CounterUtils.increaseCounter(context);
+//        Integer count = (Integer) context.getAttribute("counter");
+//        if (count == null) {
+//            count = 0;
+//        }
+//        Integer count = Optional.ofNullable((Integer) context.getAttribute("counter")).orElse(0);
+//        context.setAttribute("counter", count);
 
         try (PrintWriter out = resp.getWriter()) {
 //        String title = getServletConfig().getInitParameter("title");
 //        String name = getServletConfig().getInitParameter("name");
             out.println("Hello, Servlet" + title + " " + name);
+            out.println(getServletContext().getInitParameter("url"));
 
+            out.println(getServletContext().getAttribute("counter"));
         } catch (IOException ex) {
             log.error("", ex);
         }

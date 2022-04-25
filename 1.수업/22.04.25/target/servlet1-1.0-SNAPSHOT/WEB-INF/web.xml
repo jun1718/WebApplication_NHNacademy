@@ -69,4 +69,27 @@
         <servlet-name>countServlet</servlet-name>
         <url-pattern>/count</url-pattern>
     </servlet-mapping>
+
+
+    <context-param>
+        <param-name>url</param-name>
+        <param-value>https://nhnacademy.com/</param-value>
+    </context-param>
+
+
+    <servlet>
+        <servlet-name>requestServlet</servlet-name>
+        <servlet-class>com.nhnacademy.servlet.RequestServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>requestServlet</servlet-name>
+        <url-pattern>/req</url-pattern>
+
+    </servlet-mapping>
+
+<!--    <context-param>-->
+<!--        <param-name>allCount</param-name>-->
+<!--        <param-value>0</param-value>-->
+<!--    </context-param>-->
 </web-app>
