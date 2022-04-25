@@ -1,0 +1,368 @@
+
+
+#################################################################################################
+1)nginx
+
+https://nginx.org/en/download.html -> nginx.exe 다운 (스테이블버전으로) : window 설치방법임
+
+nginx.exe
+nginx.exe -s stop : 죽어라
+	-s : 시그널
+nginx.exe -s start : 시작
+nginx.exe -s restart : 재시작
+
+기본적으로 포트 설정하지 않을시에 포트 80을 씀
+
+브라우저에서 localhost:80치면 엔진엑스뜸
+
+html : 루트디렉토리
+동루트?
+conf/nginx.conf : 설정파일
+
+
+nginx.exe -V : 설치경로, 디렉토리 컨벤션이 다른 경우가 있는데 -V를 해서 보면 설치경로가 잘적혀있음(설정파일 conf등)
+	어떤 모듈이 있는지 도 with-module(http_sub_)등 있는걸 볼수 있음 
+	아파치나 뭘 보고 위치커맨드로 경로 찾고 경로 -v해서 쭉봤더니 그런 모듈을 찾을수 있다.
+
+nginx.exe -v : 버전
+
+C:\IT\7.NHN아카데미\2.본과정\2.수업\7\nginx-1.20.2\nginx -V
+
+
+nginx version: nginx/1.20.2
+built by cl 16.00.40219.01 for 80x86
+built with OpenSSL 1.1.1l  24 Aug 2021
+TLS SNI support enabled
+configure arguments: --with-cc=cl --builddir=objs.msvc8 --with-debug --prefix= --conf-path=conf/nginx.conf --pid-path=logs/nginx.pid --http-log-path=logs/access.log --error-log-path=logs/error.log --sbin-path=nginx.exe --http-client-body-temp-path=temp/client_body_temp --http-proxy-temp-path=temp/proxy_temp --http-fastcgi-temp-path=temp/fastcgi_temp --http-scgi-temp-path=temp/scgi_temp --http-uwsgi-temp-path=temp/uwsgi_temp --with-cc-opt=-DFD_SETSIZE=1024 --with-pcre=objs.msvc8/lib/pcre-8.44 --with-zlib=objs.msvc8/lib/zlib-1.2.11 --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_stub_status_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_auth_request_module --with-http_random_index_module --with-http_secure_link_module --with-http_slice_module --with-mail --with-stream --with-openssl=objs.msvc8/lib/openssl-1.1.1l --with-openssl-opt='no-asm no-tests -D_WIN32_WINNT=0x0501' --with-http_ssl_module --with-mail_ssl_module --with-stream_ssl_module
+
+
+
+#################################################################################################
+
+
+
+
+
+#################################################################################################
+2)메이븐/웹어플리케이션 만들기
+
+
+maven 만들고 프로젝트의 컨텍스트 메뉴를 켜서 add에서 webapplication 클릭후 웹어플리케이션 실행해라
+구조 디렉터리에 web이라는 디렉터리가 생긴다.
+이때 메이븐이 아니라면 이대로 사용해도 되지만 web이라는 src와 동루트에 있는 루트는 메이븐에서 지원하며
+
+메이븐의 정해진 구조와 다르기 때문에 이름을 webapp으로 변경한뒤 원래 들어가야할 구조인 src/main내부로
+보낸다.
+src/main/webapp
+
+런컨피규레이션 
+-> + 
+-> tomcatserver/local 
+-> 폴더지정
+-> warning의 fix 클릭	(fix 클릭하면 Deployment 구역으로 이동함)
+-> /servlet1_war_exploded -> /            
+#################################################################
+
+
+
+
+#################################################################################################
+3)의존성추가(서블릿, 로깅, 롬복)
+
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.11</version>
+        </dependency>
+
+****참고
+JUL 이상해서 log4j, logback -> 중구난방이라서 SLF4J simple logging facade 4(for) java
+	-로그구현체들이 너무 복잡하니까
+	위에 logback-classic을 추가하면 내부에 다 감싸고 있음 4, back
+
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
+
+
+
+#################################################################################################
+
+
+
+
+
+
+
+
+
+#################################################################################################
+4)
+
+#TestServlet.java
+
+package com.nhnacademy.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class TestServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+        PrintWriter out = resp.getWriter();
+        out.println("Hello, Servlet");
+    }
+}
+
+
+
+#servlet 설정
+
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="CheckStyle-IDEA-Module">
+    <option name="configuration">
+      <map />
+    </option>
+  </component>
+  <component name="FacetManager">
+    <facet type="web" name="Web">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/main/webapp/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+  </component>
+</module>
+
+
+
+#pom설정 : war, build
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.nhnacademy</groupId>
+    <artifactId>servlet1</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
+
+tomcat 실행 -> 뭔진모르겠지만  
+/test ㄱㄱ
+
+
+#################################################################################################
+
+
+
+
+
+
+
+#################################################################################################
+5)용어설명
+
+-JavaEE : 자바언어 플랫폼중의 하나
+	-자바언어로 
+
+서블릿은 api다: 규약
+서블릿을 구현한게 ee
+얘를 돌릴수있게 만든놈이 tomcat(WAS)
+
+호환이 되기위해선 3개의 버전이 맞아야함
+서블릿 4.0 javaEE 8 tomcat 8
+
+
+
+
+#################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+#################################################################################################
+6) server init, destroy, service 생애주기보기
+
+
+test에 overriding 
+After launch : init의 주기인데 브라우저에서 호출되었을때 요청되는게 아니라 test를 부를때요청됨
+
+
+package com.nhnacademy.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Slf4j
+public class TestServlet extends HttpServlet {
+//    private static final Logger LOGGER = LoggerFactory.getLogger(TestServlet.class);
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+        log.error("service() called");
+        super.service(req, resp);
+    }
+
+    @Override
+    public void destroy() {
+        log.error("destroy() called");
+        super.destroy();
+    }
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        log.error("init() called");
+        super.init(config);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+        try (PrintWriter out = resp.getWriter()) {
+            out.println("Hello, Servlet");
+
+        } catch (IOException ex) {
+            log.error("", ex);
+        }
+
+    }
+}
+
+사무장님 1기 교육생 반장 최겸준입니다.
+앞으로 교육생들 자치활동에 관해서 교육부측의 코멘트 및 방향성을 지침받기 위해서 사무장님께 
+활동내용을 보고할 예정입니다.(교육 관련은 매니저님, 생활양식 관련해서는 사무장님께 말씀드리는게 맞다고 생각됩니다. 혹시나
+아니라면 알려주시기 바랍니다.)
+
+활동내용은 아직 구체적으로 정한 바 없지만 1주일에 한번 애로사항이나 건의사항을 모아서 전달해주는 것을 
+고정활동으로 생각하고 있습니다.
+
+앞으로 잘 부탁드립니다.
+
+
+#################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+#################################################################################################
+7)
+
+처음 서블릿 컨테이너가 뜰때 init이 실행되게하는법:          
+	<load-on-startup>1</load-on-startup> 하나만 추가하면 된다.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <servlet>
+        <servlet-name>testServlet</servlet-name>
+        <servlet-class>com.nhnacademy.servlet.TestServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>testServlet</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
+
+
+
+
+#################################################################################################
+
+
+#################################################################################################
+
+
+
+#################################################################################################
