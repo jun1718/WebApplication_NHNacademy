@@ -364,5 +364,53 @@ public class TestServlet extends HttpServlet {
 #################################################################################################
 과제
 error 발생시 sendError
+  String basic = "<!DOCTYPE html>\n" +
+            "<html lang=\"en\">\n" +
+            "<head>\n" +
+            "    <meta charset=\"UTF-8\">\n" +
+            "    <title>상품목록</title>\n" +
+            "    <style>\n" +
+            "        table {\n" +
+            "            text-align: center;\n" +
+            "            margin-left: auto;\n" +
+            "            margin-right: auto;\n" +
+            "            border: 1px solid;\n" +
+            "            border-collapse: collapse;\n" +
+            "            width: 70%;\n" +
+            "        }\n" +
+            "        th, td {\n" +
+            "            border: 1px solid;\n" +
+            "        }\n" +
+            "        input {\n" +
+            "            margin-left: auto;\n" +
+            "            margin-right: auto;\n" +
+            "        }\n" +
+            "    </style>" +
+            "</head>\n" +
+            "<body>\n" +
+            "<form method=\"post\" action=\"/cart\">\n" +
+            "    <table>\n" +
+            "        <tr>\n" +
+            "            <th>상품명</th>\n" +
+            "            <th>가격</th>\n" +
+            "            <th>수량</th>\n" +
+            "        </tr>\n";
 
+        StringBuilder sb = new StringBuilder(basic);
+
+        sb.append("        <tr>\n");
+        sb.append("            <td>" + "양파" + "</td>\n");
+        sb.append("            <td>" + "1000" + "</td>\n");
+        sb.append("            <td>" + "2" + "</td>\n");
+        sb.append("        </tr>\n");
+
+        sb.append("        <tr>\n")
+            .append("            <td colspan = \"3\">총액 : 2000원</td>\n")
+            .append("        </tr>\n")
+            .append("    </table>\n")
+            .append("</form>\n")
+            .append("</body>\n")
+            .append("</html>");
+
+        System.out.println(sb);
 #################################################################################################
